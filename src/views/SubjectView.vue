@@ -33,12 +33,22 @@
       ></i>
       <i @click="handleDelete" class="fa-solid fa-trash"></i>
     </div>
+    <div class="lesson">
+      <h1 class="lessonTxt">Your Lessons</h1>
+      <Lessoncards :lessonsP="lessons" />
+    </div>
+
+    <input v-model="Sname" placeholder="name" type="text" />
+    <input v-model="Sdiff" placeholder="difficulty" type="text" />
+    <input v-model="Stime" placeholder="time" type="text" />
+    <input v-model="Squestions" placeholder="num of Qs" type="text" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import router from "../router/index.js";
+import Lessoncards from "../components/LessonsCards.vue";
 
 export default {
   name: "SubjectView",
@@ -51,6 +61,7 @@ export default {
       Sdesc: "",
       Spic: "",
       updateMode: false,
+      lessons: {},
     };
   },
   async mounted() {
@@ -72,7 +83,11 @@ export default {
       },
     });
 
-    console.log(resLesson);
+    const lessons = JSON.parse(JSON.stringify(resLesson.data));
+
+    console.log(lessons);
+
+    this.lessons = lessons;
   },
   methods: {
     async handleDelete() {
@@ -95,6 +110,9 @@ export default {
       router.go();
     },
   },
+  components: {
+    Lessoncards,
+  },
 };
 </script>
 
@@ -104,8 +122,8 @@ export default {
 
 .container {
   display: flex;
-  height: calc(100vh - 100px);
   background-color: grey;
+  flex-direction: column;
 }
 
 .subject {
@@ -114,6 +132,7 @@ export default {
   background-color: rgb(34, 170, 100);
   width: 100vw;
   height: 30vh;
+  z-index: 100;
 }
 
 .subjectPP {
@@ -190,5 +209,18 @@ export default {
   position: absolute;
   right: 9%;
   cursor: pointer;
+}
+
+.lesson {
+  background-color: rgba(0, 0, 0, 0.801);
+  min-height: calc(70vh - 100px);
+}
+
+.lessonTxt {
+  font-family: "Quicksand", sans-serif;
+  font-size: 56px;
+  margin-top: 20px;
+  margin-left: 50px;
+  color: white;
 }
 </style>
